@@ -1,43 +1,43 @@
-
-provider "azurerm" {
-  features {}
-
-  client_id       = var.client_id
-  client_secret   = var.client_secret
-  tenant_id       = var.tenant_id
-  subscription_id = var.subscription_id
+variable "client_id" {
+  description = "Azure Client ID"
+  type        = string
 }
 
-# Resource Group
-resource "azurerm_resource_group" "rg" {
-  name     = var.resource_group_name
-  location = var.location
+variable "client_secret" {
+  description = "Azure Client Secret"
+  type        = string
 }
 
-# App Service Plan
-resource "azurerm_app_service_plan" "plan" {
-  name                = var.app_service_plan_name
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-
-  sku {
-    tier = "Basic"
-    size = "B1"
-  }
+variable "tenant_id" {
+  description = "Azure Tenant ID"
+  type        = string
 }
 
-# App Service (Web App)
-resource "azurerm_app_service" "app" {
-  name                = var.app_service_name
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  app_service_plan_id = azurerm_app_service_plan.plan.id
+variable "subscription_id" {
+  description = "Azure Subscription ID"
+  type        = string
+}
 
-  site_config {
-    always_on = true
-  }
+variable "resource_group_name" {
+  description = "Name of the resource group"
+  type        = string
+  default     = "jenkins-mohit-rg"
+}
 
-  app_settings = {
-    "WEBSITE_RUN_FROM_PACKAGE" = "1"
-  }
+variable "location" {
+  description = "Azure region"
+  type        = string
+  default     = "East US"
+}
+
+variable "app_service_plan_name" {
+  description = "App Service Plan name"
+  type        = string
+  default     = "jenkins-mohit-plan"
+}
+
+variable "app_service_name" {
+  description = "App Service (Web App) name"
+  type        = string
+  default     = "jenkins-mohit-app123"
 }
