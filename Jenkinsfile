@@ -54,19 +54,8 @@ pipeline {
         stage('Deploy to Azure') {
             steps {
                 bat '''
-                powershell Compress-Archive -Path WebApiJenkins\\publish\\* -DestinationPath publish.zip -Force
-
-                az login --service-principal ^
-                  -u %ARM_CLIENT_ID% ^
-                  -p %ARM_CLIENT_SECRET% ^
-                  --tenant %ARM_TENANT_ID%
-
-                az webapp deploy ^
-                  --resource-group jenkins-mohit-rg ^
-                  --name jenkins-mohit-app123 ^
-                  --src-path publish.zip ^
-                  --type zip
-                '''
+                  powershell Compress-Archive -Path WebApiJenkins\\publish\\* -DestinationPath publish.zip -Force
+                az webapp deployment source config-zip --resource-group jenkins-mohit-rg --name jenkins-mohit-app123 --src publish.zip
             }
         }
     }
