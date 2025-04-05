@@ -1,7 +1,5 @@
-// For terraform
 pipeline {
     agent any
-
     environment {
         ARM_CLIENT_ID       = credentials('AZURE_CLIENT_ID')
         ARM_CLIENT_SECRET   = credentials('AZURE_CLIENT_SECRET')
@@ -10,9 +8,9 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
-                git url: 'https://github.com/mohitsingh0008/WebApiJenkins', branch: 'master'
+                git branch: 'master', url: 'https://github.com/mohitsingh0008/WebApiJenkins'
             }
         }
 
@@ -57,9 +55,19 @@ pipeline {
             steps {
                 bat '''
                 powershell Compress-Archive -Path WebApiJenkins\\publish\\* -DestinationPath publish.zip -Force
-                az webapp deployment source config-zip --resource-group jenkins-palak-rg --name jenkins-palak-app123 --src publish.zip
+
+                az login --service-principal ^
+                  -u %ARM_CLIENT_ID% ^
+                  -p %ARM_CLIENT_SECRET% ^
+                  --tenant %ARM_TENANT_ID%
+
+                az webapp deploy ^
+                  --resource-group jenkins-mohit-rg ^
+                  --name jenkins-mohit-app123 ^
+                  --src-path publish.zip ^
+                  --type zip
                 '''
             }
-        }   
+        }
     }
 }
