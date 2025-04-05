@@ -55,7 +55,7 @@ pipeline {
             steps {
                 bat '''
                   powershell Compress-Archive -Path WebApiJenkins\\publish\\* -DestinationPath publish.zip -Force
-                az webapp deployment source config-zip --resource-group jenkins-mohit-rg --name jenkins-mohit-app123 --src publish.zip
+                az webapp deployment source config-zip --resource-group jenkins-mohit-rg --name jenkins-mohit-app123 --src publish.zip '''
             }
         }
     }
